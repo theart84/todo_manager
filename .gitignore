@@ -6,3 +6,5 @@ node_modules
 
 #Distributive
 dist
+
+package-lock.json
