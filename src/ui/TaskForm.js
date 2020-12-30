@@ -1,39 +1,35 @@
 import {taskFormTemplate} from "./html_template/taskFormTemplate";
 import {cardTemplate} from "./html_template/card_template";
 import {app} from "../js/app";
+import {createRequest} from "../js/api/createRequest";
 
 export class TaskForm {
-  constructor(container) {
-    this.container = container;
-    this.init();
+  constructor(element) {
+    this.element = element;
     this.registerEvents();
   }
-  init() {
-    this.createTaskCard();
-  }
 
-  createTaskCard() {
-    const template = taskFormTemplate();
-    this.container.insertAdjacentHTML('afterbegin', template);
+  init() {
+
   }
 
   registerEvents() {
-    const addTaskButtonElement = this.container.querySelector('.btn');
+    const addTaskButtonElement = this.element.querySelector('.btn');
     addTaskButtonElement.addEventListener('click', (e) => {
       e.preventDefault();
       this.submit();
     })
   }
+
   submit() {
-    const form = this.container.querySelector('form');
     const data = {
-      id: this.getIdForTask(),
-      title: form.querySelector('#InputTitleTask').value,
-      message: form.querySelector('#validationTextarea').value,
+      title: this.element.querySelector('#InputTitleTask').value,
+      message: this.element.querySelector('#validationTextarea').value,
+      isCompleted: false,
       date: this.formatDate(),
     }
     this.onSubmit(data);
-    form.reset()
+    this.element.reset()
   }
 
   formatDate() {
@@ -46,12 +42,12 @@ export class TaskForm {
     });
   }
 
-  getIdForTask() {
-    return `msg_${Date.now()}`;
-  }
-
-  onSubmit(options) {
-    this.task = cardTemplate(options);
-    app.render()
+  async onSubmit(options) {
+    await createRequest({
+      url: 'http://localhost:3000/api', method: 'post', data: options, callback: (response) => {
+        const template = cardTemplate(response.data);
+        app.render(template);
+      }
+    });
   }
 }
