@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 const app = express();
 const port = 3000;
 
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
 })
 
 // Connect to DB
-mongoose.connect('mongodb+srv://todos:todos2020@cluster0.4gad7.mongodb.net/todos',
+mongoose.connect(process.env.DB_URL,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true

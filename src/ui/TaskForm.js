@@ -42,12 +42,7 @@ export class TaskForm {
     });
   }
 
-  async onSubmit(options) {
-    await createRequest({
-      url: 'http://localhost:3000/api', method: 'post', data: options, callback: (response) => {
-        const template = cardTemplate(response.data);
-        app.render(template);
-      }
-    });
+  onSubmit(options) {
+    app.createTask(options);
   }
 }

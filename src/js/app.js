@@ -18,7 +18,6 @@ class App {
     this.content = this.element.querySelector('.content');
     this.taskCard = new TaskForm(this.element.querySelector('#task-create'));
     this.api = new Task('/tasks');
-    console.log(this.api)
   }
 
   registerEvents() {
@@ -28,7 +27,7 @@ class App {
         this.taskCompleted(currentTarget);
       }
       if (currentTarget.classList.contains('btn-danger')) {
-        console.log('delete')
+        this.deleteTask(currentTarget);
       }
     });
   }
@@ -38,33 +37,39 @@ class App {
     this.content.insertAdjacentHTML('afterbegin', template)
   }
 
+  async createTask(task) {
+    await this.api.post(task, (response) => {
+          const template = cardTemplate(response.data);
+          this.render(template);
+          this.loadTaskFromDB();
+        }
+    );
+  }
+
   async taskCompleted(element) {
     const parent = element.closest('.card');
     const taskId = parent.dataset.id;
-    // parent.dataset.isCompleted = true;
-
-    await createRequest({
-      url: 'http://localhost:3000/api',
-      id: taskId,
-      method: 'put',
-      data: {
-        isCompleted: true
-      },
-      callback: (response) => {
-        console.log(response.data)
-        this.loadTaskFromDB()
-
-      }
-    });
+    await this.api.put({isCompleted: true}, (response) => {
+      parent.dataset.isCompleted = 'true';
+      parent.classList.add('completed');
+      element.setAttribute('disabled', 'disabled');
+    }, taskId);
   }
 
   async loadTaskFromDB() {
-    await createRequest({
-      url: 'http://localhost:3000/api', method: 'get', callback: (response) => {
-        const template = response.data.map((task) => cardTemplate(task)).join(' ');
-        this.render(template);
-      }
+    await this.api.list(null, (response) => {
+      const template = response.data.sort((prev, next) => next.create_at - prev.create_at).map((task) => cardTemplate(task)).join(' ');
+      this.render(template)
     });
+  }
+
+  async deleteTask(element) {
+    const parent = element.closest('.card');
+    const taskId = parent.dataset.id;
+    console.log(parent, taskId)
+    await this.api.delete(null, (response) => {
+      parent.remove();
+    }, taskId)
   }
 
 }
