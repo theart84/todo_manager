@@ -1,16 +1,9 @@
-import {taskFormTemplate} from "./html_template/taskFormTemplate";
-import {cardTemplate} from "./html_template/card_template";
-import {app} from "../js/app";
-import {createRequest} from "../js/api/createRequest";
+import {app} from "../js/App";
 
 export class TaskForm {
   constructor(element) {
     this.element = element;
     this.registerEvents();
-  }
-
-  init() {
-
   }
 
   registerEvents() {
@@ -43,6 +36,6 @@ export class TaskForm {
   }
 
   onSubmit(options) {
-    app.createTask(options);
+    app.content.createTask(options);
   }
 }

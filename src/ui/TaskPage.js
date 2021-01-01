@@ -1,27 +1,25 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import '../css/style.css';
-import {TaskForm} from "../ui/TaskForm";
-import {createRequest} from "./api/createRequest";
-import {cardTemplate} from "../ui/html_template/card_template";
-import Task from "./api/Task";
+import {cardTemplate} from "./html_template/card_template";
 
-class App {
-  constructor(element) {
+export class TaskPage {
+  constructor(element, api) {
     this.element = element;
-    this.content = null;
+    this.api = api;
+
     this.init();
+  }
+
+  init() {
     this.registerEvents();
     this.loadTaskFromDB();
   }
 
-  init() {
-    this.content = this.element.querySelector('.content');
-    this.taskCard = new TaskForm(this.element.querySelector('#task-create'));
-    this.api = new Task('/tasks');
+  render(template) {
+    this.element.innerHTML = '';
+    this.element.insertAdjacentHTML('afterbegin', template)
   }
 
   registerEvents() {
-    this.content.addEventListener('click', (e) => {
+    this.element.addEventListener('click', (e) => {
       const currentTarget = e.target;
       if (currentTarget.classList.contains('btn-success')) {
         this.taskCompleted(currentTarget);
@@ -32,11 +30,6 @@ class App {
     });
   }
 
-  render(template) {
-    this.content.innerHTML = '';
-    this.content.insertAdjacentHTML('afterbegin', template)
-  }
-
   async createTask(task) {
     await this.api.post(task, (response) => {
           const template = cardTemplate(response.data);
@@ -44,6 +37,13 @@ class App {
           this.loadTaskFromDB();
         }
     );
+  }
+
+  async loadTaskFromDB() {
+    await this.api.list(null, (response) => {
+      const template = response.data.sort((prev, next) => next.create_at - prev.create_at).map((task) => cardTemplate(task)).join(' ');
+      this.render(template)
+    });
   }
 
   async taskCompleted(element) {
@@ -56,22 +56,11 @@ class App {
     }, taskId);
   }
 
-  async loadTaskFromDB() {
-    await this.api.list(null, (response) => {
-      const template = response.data.sort((prev, next) => next.create_at - prev.create_at).map((task) => cardTemplate(task)).join(' ');
-      this.render(template)
-    });
-  }
-
   async deleteTask(element) {
     const parent = element.closest('.card');
     const taskId = parent.dataset.id;
-    console.log(parent, taskId)
     await this.api.delete(null, (response) => {
       parent.remove();
     }, taskId)
   }
-
 }
-
-export const app = new App(document.querySelector('.app'));

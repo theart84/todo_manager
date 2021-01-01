@@ -2,17 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const favicon = require('express-favicon');
+const path = require('path');
 require('dotenv').config();
 const app = express();
 const port = 3000;
 
 // Import routes
-const apiRoute = require('./routes/api');
+const taskRoute = require('./routes/task');
 
 // Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/tasks', apiRoute);
+app.use(favicon(__dirname + '/dist/img/favicon.ico'));
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/api/tasks', taskRoute);
 
 
 app.get('/', (req, res) => {

@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const task = express.Router();
 const Task = require('../models/Task');
 
 
-router.get('/', async(req, res) => {
+task.get('/', async(req, res) => {
   try {
     const data = await Task.find();
     res.json({ success: true, data });
@@ -12,7 +12,7 @@ router.get('/', async(req, res) => {
   }
 });
 
-router.post('/', async(req, res) => {
+task.post('/', async(req, res) => {
   const task = await new Task({
     title: req.body.title,
     message: req.body.message,
@@ -27,7 +27,7 @@ router.post('/', async(req, res) => {
   }
 });
 
-router.put('/:taskId', async(req, res) => {
+task.put('/:taskId', async(req, res) => {
   try {
     const data = await Task.updateOne({_id: req.params.taskId}, {$set: {isCompleted: req.body.isCompleted}});
     res.json({ success: true });
@@ -36,7 +36,7 @@ router.put('/:taskId', async(req, res) => {
   }
 });
 
-router.delete('/:taskId', async (req, res) => {
+task.delete('/:taskId', async (req, res) => {
   try {
     const task = await Task.deleteOne({_id: req.params.taskId});
     res.json({ success: true });
@@ -47,4 +47,4 @@ router.delete('/:taskId', async (req, res) => {
 
 });
 
-module.exports = router;
+module.exports = task;
