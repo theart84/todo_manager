@@ -4,7 +4,7 @@ export async function createRequest(options) {
     return;
   }
   let requestURL = options.url;
-  if (options.method === 'put' || options.method === 'delete') {
+  if (options.method === 'put' || options.method === 'delete' || options.method === 'get') {
     requestURL = `${options.url}/${options.params}`;
   }
   let response = await fetch(requestURL, {

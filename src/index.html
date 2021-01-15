@@ -18,14 +18,13 @@
                 <form name="task-create" id="task-create">
                   <div class="form-group">
                     <label for="InputTitleTask">Title</label>
-                    <input type="text" class="form-control" id="InputTitleTask" aria-describedby="titleHelp">
-                    <small id="titleHelp" class="form-text text-muted">Input title your task.</small>
+                    <input type="text" class="form-control" id="InputTitleTask" aria-describedby="titleHelp" placeholder="Input title your task">
                   </div>
                   <div class="form-group">
                     <label for="validationTextarea">Description</label>
                     <textarea class="form-control " id="validationTextarea" placeholder="Please input description your task..." required></textarea>
                   </div>
-                  <button type="submit" class="btn btn-primary">Add task</button>
+                  <button type="submit" class="btn btn-primary btn-sm">Add task</button>
                 </form>
               </div>
             </div>
@@ -38,6 +37,34 @@
             </div>
           </div>
         </div>
+      <div class="modal" id="modal-edit" data-modal-id="edit">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-title">Edit task</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="inputTitle" class="col-form-label">Title:</label>
+                  <input type="text" class="form-control" id="inputTitle">
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription" class="col-form-label">Description:</label>
+                  <textarea class="form-control" id="inputDescription"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary btn-sm edit">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

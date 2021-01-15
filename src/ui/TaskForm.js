@@ -1,6 +1,6 @@
 import {app} from "../js/App";
 
-export class TaskForm {
+export default class TaskForm {
   constructor(element) {
     this.element = element;
     this.registerEvents();

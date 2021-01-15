@@ -14,9 +14,9 @@ const taskRoute = require('./routes/task');
 // Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.use(favicon(__dirname + '/dist/img/favicon.ico'));
-app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(favicon(__dirname + '/dist/img/favicon.ico'));
+// app.use(express.static(__dirname));
+// app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api/tasks', taskRoute);
 
 

@@ -12,6 +12,15 @@ task.get('/', async(req, res) => {
   }
 });
 
+task.get('/:taskId', async(req, res) => {
+  try {
+    const data = await Task.findOne({_id: req.params.taskId});
+    res.json({ success: true, data });
+  } catch (err) {
+    res.json({success: false, message: err})
+  }
+});
+
 task.post('/', async(req, res) => {
   const task = await new Task({
     title: req.body.title,
@@ -29,7 +38,7 @@ task.post('/', async(req, res) => {
 
 task.put('/:taskId', async(req, res) => {
   try {
-    const data = await Task.updateOne({_id: req.params.taskId}, {$set: {isCompleted: req.body.isCompleted}});
+    const data = await Task.updateOne({_id: req.params.taskId}, {$set: req.body});
     res.json({ success: true });
   } catch (err) {
     res.json({success: false, message: err});

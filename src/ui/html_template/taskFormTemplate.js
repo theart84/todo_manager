@@ -12,7 +12,7 @@ export function taskFormTemplate() {
           <label for="validationTextarea">Description</label>
           <textarea class="form-control " id="validationTextarea" placeholder="Please input description your task..." required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Add task</button>
+        <button type="submit" class="btn btn-outline-primary">Add task</button>
       </form>
     </div>
   </div>
